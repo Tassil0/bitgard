@@ -1,44 +1,80 @@
-use gtk::prelude::*;
-use gtk::Application;
-use gtk::ApplicationWindow;
-use gtk::Button;
-const APP_ID: &str = "org.gtk_rs.HelloWorld1";
+use adw::prelude::*;
 
+use adw::{ActionRow, Application, ApplicationWindow, gio, HeaderBar, Window};
+use gtk::{Box, ListBox, Orientation, SelectionMode};
+
+const APP_ID: &str = "com.tassilobalbo.bitgard";
 
 fn main() {
-    // Create a new application
-    let app = Application::builder().application_id(APP_ID).build();
+    // Register and include resources
+    gio::resources_register_include!("bitgard.gresource")
+        .expect("Failed to register resources.");
 
-    // Connect to "activate" signal of `app`
+    let app = Application::builder()
+        .application_id(APP_ID)
+        .build();
+
     app.connect_activate(build_ui);
 
-    // Run the application
+    /*app.connect_activate(|app| {
+        let mut rows: Vec<ActionRow> = Vec::new();
+
+        for i in 0..10 {
+            rows.push(ActionRow::builder()
+                            .activatable(true)
+                            .title("Click me")
+                            .build());
+        }
+
+        // ActionRows are only available in Adwaita
+        let row = ActionRow::builder()
+            .activatable(true)
+            .title("Click me")
+            .build();
+        row.connect_activated(|_| {
+            eprintln!("Clicked!");
+        });
+
+        let list = ListBox::builder()
+            .margin_top(32)
+            .margin_end(32)
+            .margin_bottom(32)
+            .margin_start(32)
+            .selection_mode(SelectionMode::None)
+            // makes the list look nicer
+            .css_classes(vec![String::from("boxed-list")])
+            .build();
+
+        for i in 0..10 {
+            list.append(&rows[i]);
+        }
+
+        let header = HeaderBar::builder()
+            .title("ahojki")
+            .show_close_button(true)
+            .build();
+
+        // Combine the content in a box
+        let content = Box::new(Orientation::Vertical, 0);
+        // Adwaitas' ApplicationWindow does not include a HeaderBar
+        content.append(&HeaderBar::new());
+        content.append(&list);
+
+        let window = ApplicationWindow::builder()
+            .application(app)
+            .title("First App")
+            .default_width(350)
+            // add content to window
+            .content(&content)
+            .build();
+        window.show();
+    });*/
+
     app.run();
 }
 
 fn build_ui(app: &Application) {
-    // Create a button with label and margins
-    let button = Button::builder()
-        .label("Press me!")
-        .margin_top(12)
-        .margin_bottom(12)
-        .margin_start(12)
-        .margin_end(12)
-        .build();
-
-    // Connect to "clicked" signal of `button`
-    button.connect_clicked(move |button| {
-        // Set the label to "Hello World!" after the button has been clicked on
-        button.set_label("Hello World!");
-    });
-
-    // Create a window
-    let window = ApplicationWindow::builder()
-        .application(app)
-        .title("My GTK App")
-        .child(&button)
-        .build();
-
-    // Present window
+    let window = Window::new();
+    //window.show();
     window.present();
 }

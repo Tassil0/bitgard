@@ -7,3 +7,10 @@ edition = "2021"
 
 [dependencies]
 gtk = { version = "0.5.1", package = "gtk4" }
+
+[dependencies.adw]
+package = "libadwaita"
+version = "0.2.0"
+
+[build-dependencies]
+glib-build-tools = "0.16.3"
